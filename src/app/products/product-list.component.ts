@@ -21,6 +21,9 @@ export class ProductListComponent {
       return EMPTY;
     }));
 
+  productsWithCategory$ =  this.productService.productsWithCategory$;
+
+
   constructor(private productService: ProductService) { }
 
   onAdd(): void {
