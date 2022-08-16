@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
-import { catchError, EMPTY } from 'rxjs';
+import { catchError, EMPTY, Observable } from 'rxjs';
 import { ProductCategory } from '../product-categories/product-category';
+import { ProductCategoryService } from '../product-categories/product-category.service';
 
 import { ProductService } from './product.service';
 
@@ -12,7 +13,6 @@ import { ProductService } from './product.service';
 export class ProductListComponent {
   pageTitle = 'Product List';
   errorMessage = '';
-  categories: ProductCategory[] = [];
 
   products$ = this.productService.products$.pipe(
     catchError(err => {
@@ -23,8 +23,14 @@ export class ProductListComponent {
 
   productsWithCategory$ =  this.productService.productsWithCategory$;
 
+  categories$: Observable<ProductCategory[]> = this.productCategoryService.productCategories$.pipe(
+    catchError(err => {
+      this.errorMessage = err;
+      //return of([]);
+      return EMPTY;
+    }));
 
-  constructor(private productService: ProductService) { }
+  constructor(private productService: ProductService, private productCategoryService: ProductCategoryService) { }
 
   onAdd(): void {
     console.log('Not yet implemented');
