@@ -6,8 +6,7 @@ import {
   map,
   Observable,
   combineLatest,
-  Subject,
-  startWith,
+  BehaviorSubject,
 } from 'rxjs';
 import { ProductCategory } from '../product-categories/product-category';
 import { ProductCategoryService } from '../product-categories/product-category.service';
@@ -22,13 +21,13 @@ export class ProductListComponent {
   pageTitle = 'Product List';
   errorMessage = '';
 
-  private categorySelectedSubject = new Subject<number>();
+  private categorySelectedSubject = new BehaviorSubject<number>(0);
   selectedCategoryAction$ = this.categorySelectedSubject.asObservable();
 
   productsWithCategory$ = this.productService.productsWithCategory$;
   products$ = combineLatest([
     this.productService.productsWithCategory$,
-    this.selectedCategoryAction$.pipe(startWith(0)),
+    this.selectedCategoryAction$,
   ]).pipe(
     map(([products, selctedCategoryId]) =>
       products.filter((product) =>
