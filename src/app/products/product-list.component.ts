@@ -7,6 +7,7 @@ import {
   Observable,
   combineLatest,
   Subject,
+  startWith,
 } from 'rxjs';
 import { ProductCategory } from '../product-categories/product-category';
 import { ProductCategoryService } from '../product-categories/product-category.service';
@@ -27,7 +28,7 @@ export class ProductListComponent {
   productsWithCategory$ = this.productService.productsWithCategory$;
   products$ = combineLatest([
     this.productService.productsWithCategory$,
-    this.selectedCategoryAction$,
+    this.selectedCategoryAction$.pipe(startWith(0)),
   ]).pipe(
     map(([products, selctedCategoryId]) =>
       products.filter((product) =>
